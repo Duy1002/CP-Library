@@ -1,0 +1,27 @@
+<snippet>
+	<content><![CDATA[
+vector<int> prefix_function(const string &s) {
+    int n = s.size();
+    vector<int> pi(n, 0);
+    for (int i = 1, j = 0; i < n; ++i) {
+        while (j && s[j] != s[i]) j = pi[j - 1];
+        pi[i] = j += (s[j] == s[i]);
+    }
+    return pi;
+}
+vector<vector<int>> automaton(string s, const vector<int> &pi) {
+    for (auto &i: s) i -= 'a';
+    s += char(27);
+    int n = s.size();
+    vector<vector<int>> aut(n, vector<int>(26));
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < 26; ++j)
+            aut[i][j] = i && s[i] != j ? aut[pi[i - 1]][j] : i + (s[i] == j);
+    return aut;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>Knuth_Morris_Pratt</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

@@ -1,0 +1,29 @@
+<snippet>
+	<content><![CDATA[
+uint64_t hilbertorder(int x, int y) {
+    const int logn = __lg(max(x, y) * 2 + 1) | 1;
+    const int maxn = (1 << logn) - 1;
+    uint64_t res = 0;
+    for (int s = 1 << (logn - 1); s; s >>= 1) {
+        bool rx = x & s, ry = y & s;
+        res = (res << 2) | (rx ? ry ? 2 : 1 : ry ? 3 : 0);
+        if (!rx) {
+            if (ry) x ^= maxn, y ^= maxn;
+            swap(x, y);
+        }
+    }
+    return res;
+}
+struct query {
+    int l, r, id;
+    uint64_t w;
+    query() = default;
+    query(int l, int r, int id): l(l), r(r), id(id), w(hilbertorder(l, r)) {}
+    bool operator < (const query &o) const { return w < o.w; }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mo_algorithm</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

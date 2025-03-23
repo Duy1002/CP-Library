@@ -1,0 +1,48 @@
+<snippet>
+	<content><![CDATA[
+#include "bits/stdc++.h"
+using namespace std;
+bool START;
+void init();
+void Nguyen_Tuong_Duy();
+bool multitest();
+void memory();
+int main() {
+    #ifndef ONLINE_JUDGE
+        auto starttime = chrono::high_resolution_clock::now();
+    #endif
+    cin.tie(0)->sync_with_stdio(0);
+    cin.exceptions(ios::badbit | ios::failbit);
+    init();
+    int TEST = 1;
+    if (multitest()) cin >> TEST;
+    while (TEST--) Nguyen_Tuong_Duy();
+    #ifndef ONLINE_JUDGE
+        auto endtime = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(endtime - starttime).count();
+        cerr << "\nUsed: " << duration << " ms, ";
+        memory();
+    #endif
+}
+
+bool multitest() {
+    return 0;
+}
+
+void init() {
+}
+
+void Nguyen_Tuong_Duy() {
+}
+
+bool END;
+void memory() {
+    cerr << fixed << setprecision(3);
+    cerr << fabs((&START - &END) / 1048576.0) << " MB\n\n";
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>template</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
