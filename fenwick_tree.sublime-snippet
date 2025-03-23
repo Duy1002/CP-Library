@@ -3,22 +3,23 @@
 struct fenwick_tree {
     int n;
     vector<long long> t;
+    fenwick_tree() = default;
     fenwick_tree(int n): n(n), t(n + 1) {}
-    fenwick_tree(const vector<int> &a): n(a.size()), t(a.size() + 1) {
+    void build(const vector<int> &a) {
+        n = a.size();
+        t.resize(n + 1);
         for (int i = 1; i <= n; ++i) {
             t[i] += a[i - 1];
-            int j = i + (1 << __builtin_ctz(i));
+            int j = i + (i & -i);
             if (j <= n) t[j] += t[i];
         }
     }
     void update(int p, int v) {
-        assert(p >= 1);
-        for (; p <= n; p += 1 << __builtin_ctz(p)) t[p] += v;
+        for (; p <= n; p += p & -p) t[p] += v;
     }
-    long long query(int p) {
-        assert(p >= 1);
+    long long prefix(int p) {
         long long s = 0;
-        for (; p; p -= 1 << __builtin_ctz(p)) s += t[p];
+        for (; p; p &= p - 1) s += t[p];
         return s;
     }
     int lower_bound(long long v) {
