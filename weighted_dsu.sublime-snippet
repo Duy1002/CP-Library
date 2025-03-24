@@ -23,6 +23,9 @@ struct weighted_dsu {
         while (weight[u] <= w) u = parent(u);
         return u;
     }
+    int get_size(int u) {
+        return size[find(u)];
+    }
     void disconnect(int u) {
         if (parent(u) != u) {
             disconnect(parent(u));
@@ -36,7 +39,7 @@ struct weighted_dsu {
         }
         return u;
     }
-    void add_edge(int u, int v, int w) {
+    void add_edge_unconnected(int u, int v, int w) {
         disconnect(u);
         disconnect(v);
         while (u != v) {
@@ -60,7 +63,7 @@ struct weighted_dsu {
         }
         return u;
     }
-    void delete_edge(int u) {
+    void delete_parent(int u) {
         int v = u;
         while (parent(v) != v) {
             v = parent(v);
@@ -69,25 +72,22 @@ struct weighted_dsu {
         parent(u) = u;
         weight[u] = INT_MAX;
     }
-    int merge(int u, int v, int w) {
+    int add_edge(int u, int v, int w) {
         int p = max_edge(u, v);
         if (p == -1) {
-            add_edge(u, v, w);
+            add_edge_unconnected(u, v, w);
             return w;
         } else if (weight[p] > w) {
             int res = w - weight[p];
-            delete_edge(p);
-            add_edge(u, v, w);
+            delete_parent(p);
+            add_edge_unconnected(u, v, w);
             return res;
         }
         return 0;
     }
-    void del(int u, int v, int w) {
+    void delete_edge(int u, int v, int w) {
         int p = max_edge(u, v);
-        if (p != -1 && weight[p] == w) delete_edge(p);
-    }
-    int get_size(int u) {
-        return size[find(u)];
+        if (p != -1 && weight[p] == w) delete_parent(p);
     }
 };
 ]]></content>
