@@ -2,7 +2,7 @@
 	<content><![CDATA[
 const uint64_t seed = chrono::high_resolution_clock::now().time_since_epoch().count();
 mt19937 rng(seed);
-shuffle(a.begin(), a.end(), default_random_engine(seed));
+shuffle(a.begin(), a.end(), mt19937(seed));
 uniform_int_distribution<>(l, r)(rng);
 uniform_real_distribution<>(l, r)(rng);
 ]]></content>
