@@ -23,25 +23,28 @@ struct query {
         return w < o.w;
     }
 };
-template<typename T1, typename T2, typename T3>
+template<typename T1, typename T2, typename T3, typename T4, typename T5>
 struct mo_algorithm {
     int L = 0, R = 0;
-    T1 add;
-    T2 del;
-    T3 &ans;
+    T1 add_left;
+    T2 add_right;
+    T3 delete_left;
+    T4 delete_right;
+    T5 &ans;
     vector<query> q;
-    mo_algorithm(T1 add, T2 del, T3 &ans): add(add), del(del), ans(ans) {}
+    mo_algorithm(T1 add_left, T2 add_right, T3 delete_left, T4 delete_right, T5 &ans):
+        add_left(add_left), add_right(add_right), delete_left(delete_left), delete_right(delete_right), ans(ans) {}
     void add_query(int l, int r) {
         q.emplace_back(l, r, q.size());
     }
-    vector<T3> solve() {
+    vector<T5> solve() {
         sort(q.begin(), q.end());
-        vector<T3> res(q.size());
+        vector<T5> res(q.size());
         for (auto &[l, r, id, w]: q) {
-            while (L < l) del(L++);
-            while (L > l) add(--L);
-            while (R < r) add(R++);
-            while (R > r) del(--R);
+            while (L < l) delete_left(L++);
+            while (L > l) add_left(--L);
+            while (R < r) add_right(R++);
+            while (R > r) delete_right(--R);
             res[id] = ans;
         }
         return res;
