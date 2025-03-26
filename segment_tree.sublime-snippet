@@ -1,6 +1,6 @@
 <snippet>
 	<content><![CDATA[
-template<class T, class TT>
+template<typename T, typename TT>
 struct segment_tree {
     int n;
     vector<T> t;
