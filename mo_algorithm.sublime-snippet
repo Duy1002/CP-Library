@@ -19,7 +19,33 @@ struct query {
     uint64_t w;
     query() = default;
     query(int l, int r, int id): l(l), r(r), id(id), w(hilbertorder(l, r)) {}
-    bool operator < (const query &o) const { return w < o.w; }
+    bool operator < (const query &o) const {
+        return w < o.w;
+    }
+};
+template<typename T1, typename T2, typename T3>
+struct mo_algorithm {
+    int L = 0, R = 0;
+    T1 add;
+    T2 del;
+    T3 &ans;
+    vector<query> q;
+    mo_algorithm(T1 add, T2 del, T3 &ans): add(add), del(del), ans(ans) {}
+    void add_query(int l, int r) {
+        q.emplace_back(l, r, q.size());
+    }
+    vector<T3> solve() {
+        sort(q.begin(), q.end());
+        vector<T3> res(q.size());
+        for (auto &[l, r, id, w]: q) {
+            while (L < l) del(L++);
+            while (L > l) add(--L);
+            while (R < r) add(R++);
+            while (R > r) del(--R);
+            res[id] = ans;
+        }
+        return res;
+    }
 };
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
