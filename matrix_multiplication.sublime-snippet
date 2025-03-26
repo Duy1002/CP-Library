@@ -18,7 +18,7 @@ struct matrix {
         for (uint16_t i = 0; i < n; ++i) res.a[i][i] = 1;
         return res;
     }
-    matrix operator * (const matrix &o) {
+    matrix operator * (const matrix &o) const {
         assert(a[0].size() == o.a.size());
         matrix res(a.size(), o.a[0].size());
         uint16_t n = a.size(), m = o.a[0].size(), t = a[0].size();
@@ -36,7 +36,7 @@ struct matrix {
                 res.a[i][j] %= mod;
         return res;
     }
-    matrix pow(uint64_t n) {
+    matrix pow(uint64_t n) const {
         assert(a.size() == a[0].size());
         matrix x = *this, res = indentity(a.size());
         for (; n; n >>= 1, x = x * x) if (n & 1) res = res * x;
