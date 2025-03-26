@@ -17,12 +17,12 @@ struct fenwick_tree {
     void update(int p, int v) {
         for (; p <= n; p += p & -p) t[p] += v;
     }
-    long long prefix(int p) {
+    long long prefix(int p) const {
         long long s = 0;
         for (; p; p &= p - 1) s += t[p];
         return s;
     }
-    int lower_bound(long long v) {
+    int lower_bound(long long v) const {
         long long s = 0;
         int j = 0;
         for (int i = 1 << __lg(n); i; i >>= 1) {
