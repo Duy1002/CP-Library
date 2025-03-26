@@ -1,5 +1,6 @@
 <snippet>
 	<content><![CDATA[
+// Requires tarjan_scc
 struct sat {
     int n;
     vector<bool> ans;
