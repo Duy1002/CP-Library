@@ -1,5 +1,6 @@
 <snippet>
 	<content><![CDATA[
+// Requires tarjan_scc
 vector<int> incremental_scc(int N, vector<pair<int, int>> e) {
     int m = e.size();
     vector<int> id(m), sc(m), scc, num(N);
