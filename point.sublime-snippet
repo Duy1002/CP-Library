@@ -1,0 +1,41 @@
+<snippet>
+	<content><![CDATA[
+struct point {
+    long long x, y;
+    point() = default;
+    point(long long x, long long y): x(x), y(y) {}
+    friend istream& operator >> (istream &in, point &p) {
+        return in >> p.x >> p.y;
+    }
+    friend ostream& operator << (ostream &out, const point &p) {
+        return out << p.x << ' ' << p.y;
+    }
+    friend void swap(point &a, point &b) {
+        std::swap(a.x, b.x);
+        std::swap(a.y, b.y);
+    }
+    point operator + (const point &o) const {
+        return point(x + o.x, y + o.y);
+    }
+    point operator - (const point &o) const {
+        return point(x - o.x, y - o.y);
+    }
+    bool operator == (const point &o) const {
+        return x == o.x && y == o.y;
+    }
+    long long squared_length() const {
+        return x * x + y * y;
+    }
+    friend long long dot_product(const point &a, const point &b) {
+        return a.x * b.x + a.y * b.y;
+    }
+    friend long long cross_product(const point &a, const point &b) {
+        return a.x * b.y - a.y * b.x;
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>point</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
