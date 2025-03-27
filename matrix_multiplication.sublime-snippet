@@ -4,7 +4,7 @@ const uint32_t mod = 998244353;
 const uint64_t modmod8 = 8ULL * mod * mod;
 struct matrix {
     vector<vector<uint64_t>> a;
-    matrix(): a(0) {}
+    matrix() = default;
     matrix(const vector<vector<uint64_t>> &_a): a(_a) {}
     matrix(uint16_t r, uint16_t c): a(r, vector<uint64_t>(c, 0)) {}
     auto& operator [] (uint16_t r) {
