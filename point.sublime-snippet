@@ -1,9 +1,10 @@
 <snippet>
 	<content><![CDATA[
+template<typename T>
 struct point {
-    long long x, y;
+    T x, y;
     point() = default;
-    point(long long x, long long y): x(x), y(y) {}
+    point(T x, T y): x(x), y(y) {}
     friend istream& operator >> (istream &in, point &p) {
         return in >> p.x >> p.y;
     }
@@ -23,16 +24,22 @@ struct point {
     bool operator == (const point &o) const {
         return x == o.x && y == o.y;
     }
-    long long squared_length() const {
+    bool operator < (const point &o) const {
+        if (x != o.x) return x < o.x;
+        return y < o.y;
+    }
+    T squared_length() const {
         return x * x + y * y;
     }
-    friend long long dot_product(const point &a, const point &b) {
+    friend T dot_product(const point &a, const point &b) {
         return a.x * b.x + a.y * b.y;
     }
-    friend long long cross_product(const point &a, const point &b) {
+    friend T cross_product(const point &a, const point &b) {
         return a.x * b.y - a.y * b.x;
     }
 };
+using integer_point = point<long long>;
+using real_point = point<long double>;
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>point</tabTrigger>
