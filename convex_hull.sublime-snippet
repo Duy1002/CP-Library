@@ -7,18 +7,18 @@ vector<point<T>> convex_hull(vector<point<T>> p) {
     p.erase(unique(p.begin(), p.end()), p.end());
     int n = p.size();
     if (n < 3) return p;
-    vector<point<T>> hull = {p[0]};
+    vector<point<T>> h = {p[0]};
     for (int i = 1; i < n; ++i) {
-        while (hull.size() > 1 && cross_product(hull.end()[-1] - hull.end()[-2], p[i] - hull.end()[-2]) <= 0) hull.pop_back();
-        hull.emplace_back(p[i]);
+        while (h.size() > 1 && cross_product(h.end()[-1] - h.end()[-2], p[i] - h.end()[-2]) <= 0) h.pop_back();
+        h.emplace_back(p[i]);
     }
-    int sz = hull.size();
+    int sz = h.size();
     for (int i = n - 2; i >= 0; --i) {
-        while (hull.size() > sz && cross_product(hull.end()[-1] - hull.end()[-2], p[i] - hull.end()[-2]) <= 0) hull.pop_back();
-        hull.emplace_back(p[i]);
+        while (h.size() > sz && cross_product(h.end()[-1] - h.end()[-2], p[i] - h.end()[-2]) <= 0) h.pop_back();
+        h.emplace_back(p[i]);
     }
-    hull.pop_back();
-    return hull;
+    h.pop_back();
+    return h;
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
