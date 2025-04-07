@@ -73,6 +73,18 @@ double distance(const point<T> &p, const point<T> &a, const point<T> &b) {
     if (dot_product(ap, ab) > 0 && dot_product(p - b, a - b) > 0) return abs(cross_product(ap, ab)) / distance(a, b);
     return min(distance(p, a), distance(p, b));
 }
+template<typename T>
+int half(const point<T> &p) {
+    if (p.y < 0) return -1;
+    if (!p.y && p.x >= 0) return 0;
+    return 1;
+}
+template<typename T>
+bool cmp_arg(const point<T> &p1, const point<T> &p2) {
+    int half1 = half(p1), half2 = half(p2);
+    if (half1 != half2) return half1 < half2;
+    return cross_product(p1, p2) > 0;
+}
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>basic_geometry</tabTrigger>
