@@ -68,7 +68,12 @@ vector<real_point> segment_intersect(const point<T> &a, const point<T> &b, const
     return {real_point(a.x + t * ab.x, a.y + t * ab.y)};
 }
 template<typename T>
-double distance(const point<T> &p, const point<T> &a, const point<T> &b) {
+double distance_to_line(const point<T> &p, const point<T> &a, const point<T> &b) {
+    point<T> ap = p - a, ab = b - a;
+    return abs(cross_product(ap, ab)) / distance(a, b);
+}
+template<typename T>
+double distance_to_segment(const point<T> &p, const point<T> &a, const point<T> &b) {
     point<T> ap = p - a, ab = b - a;
     if (dot_product(ap, ab) > 0 && dot_product(p - b, a - b) > 0) return abs(cross_product(ap, ab)) / distance(a, b);
     return min(distance(p, a), distance(p, b));
