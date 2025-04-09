@@ -1,0 +1,38 @@
+<snippet>
+	<content><![CDATA[
+// Requires point, basic_geometry
+template<typename T>
+vector<pair<int, int>> anti_podal_pairs(const vector<point<T>> &h) {
+    int n = h.size();
+    if (n < 2) return {};
+    if (n < 3) return {make_pair(0, 1)};
+    auto nxt = [&] (const int &i) {
+        return i == n - 1 ? 0 : i + 1;
+    };
+    auto prv = [&] (const int &i) {
+        return !i ? n - 1 : i - 1;
+    };
+    vector<bool> vis(n, 0);
+    vector<pair<int, int>> pairs;
+    for (int i = 0, j = 0; i < n; ++i) {
+        if (vis[i]) continue;
+        vis[i] = true;
+        point<T> v = h[nxt(i)] - h[i]; 
+        while (j == i || j == nxt(i) ||
+            sign(cross_product(v, h[nxt(j)] - h[j])) == sign(cross_product(v, h[j] - h[prv(j)]))) j = nxt(j);
+        pairs.emplace_back(i, j);
+        pairs.emplace_back(nxt(i), j);
+        if (!cross_product(v, h[nxt(j)] - h[j])) {
+            vis[j] = true;
+            pairs.emplace_back(i, nxt(j));
+            pairs.emplace_back(nxt(i), nxt(j));
+        }
+    }
+    return pairs;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>rotating_calipers</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
