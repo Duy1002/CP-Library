@@ -7,7 +7,7 @@ struct segment_tree {
     TT op;
     T id;
     segment_tree(TT op, T id): op(op), id(id) {}
-    segment_tree(TT op, T id, int n): op(op), id(id), t(n << 1, id) {}
+    segment_tree(TT op, T id, int n): op(op), id(id), n(n), t(n << 1, id) {}
     void build(const vector<T> &a) {
         n = a.size();
         t.resize(n << 1);
@@ -27,6 +27,24 @@ struct segment_tree {
             if (r & 1) resr = op(t[--r], resr);
         }
         return op(resl, resr);
+    }
+    void update(int l, int r, T v) {
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) t[l++] = op(t[l], v);
+            if (r & 1) t[r] = op(t[--r], v);
+        }
+    }
+    T query(int p) const {
+        T res = id;
+        for (p += n; p; p >>= 1) res = op(res, t[p]);
+        return res;
+    }
+    void push() {
+        for (int i = 1; i < n; ++i) {
+            t[i << 1] = op(t[i << 1], t[i]);
+            t[i << 1 | 1] = op(t[i << 1 | 1], t[i]);
+            t[i] = id;
+        }
     }
 };
 ]]></content>
