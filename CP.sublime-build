@@ -1,0 +1,8 @@
+{
+    "cmd": ["g++.exe", "-std=c++17", "-DLOCAL", "${file}",
+            "-o", "${file_base_name}.exe",
+            "&&", "${file_base_name}.exe<input.inp>output.out"],
+    "shell": true,
+    "working_dir": "$file_path",
+    "selector": "source.cpp"
+}

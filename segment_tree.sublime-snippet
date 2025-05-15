@@ -1,0 +1,66 @@
+<snippet>
+	<content><![CDATA[
+template<typename T, typename TT>
+struct segment_tree {
+    vector<T> t;
+    TT op;
+    T id;
+    int n;
+    segment_tree(TT op, T id): op(op), id(id) {}
+    segment_tree(TT op, T id, int n): t(n << 2, id), op(op), id(id), n(n) {}
+    void build(const vector<T> &a) {
+        n = a.size();
+        t.resize(n << 2);
+        auto rec = [&] (auto &&rec, int i, int l, int r) {
+            if (l == r) {
+                t[i] = a[l];
+                return;
+            }
+            int mid = (l + r) >> 1;
+            rec(rec, i << 1, l, mid);
+            rec(rec, i << 1 | 1, mid + 1, r);
+            t[i] = op(t[i << 1], t[i << 1 | 1]);
+        };
+        rec(rec, 1, 0, n - 1);
+    }
+    void update(int p, T v) {
+        auto rec = [&] (auto &&rec, int i, int l, int r) {
+            if (l == r) {
+                t[i] = v;
+                return;
+            }
+            int mid = (l + r) >> 1;
+            if (p <= mid) rec(rec, i << 1, l, mid);
+            else rec(rec, i << 1 | 1, mid + 1, r);
+            t[i] = op(t[i << 1], t[i << 1 | 1]);
+        };
+        rec(rec, 1, 0, n - 1);
+    }
+    T query(int x, int y) {
+        --y;
+        auto rec = [&] (auto &&rec, int i, int l, int r) {
+            if (y < l || r < x) return id;
+            if (x <= l && r <= y) return t[i];
+            int mid = (l + r) >> 1;
+            return op(rec(rec, i << 1, l, mid), rec(rec, i << 1 | 1, mid + 1, r));
+        };
+        return rec(rec, 1, 0, n - 1);
+    }
+    template<typename F>
+    int lower_bound(F f) {
+        if (f(t[1])) return n;
+        auto rec = [&] (auto &&rec, int i, int l, int r) {
+            if (l == r) return l;
+            int mid = (l + r) >> 1;
+            if (f(t[i << 1])) return rec(rec, i << 1 | 1, mid + 1, r);
+            return rec(rec, i << 1, l, mid);
+        };
+        return rec(rec, 1, 0, n - 1);
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>segment_tree</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

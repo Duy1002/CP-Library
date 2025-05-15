@@ -1,0 +1,98 @@
+<snippet>
+	<content><![CDATA[
+struct weighted_dsu {
+    vector<int> par, weight, priority, size;
+    weighted_dsu(int n): par(n), weight(n), priority(n), size(n) {
+        for (int i = 0; i < n; ++i) {
+            par[i] = priority[i] = i;
+            weight[i] = INT_MAX;
+            size[i] = 1;
+        }
+        uint64_t seed = chrono::high_resolution_clock::now().time_since_epoch().count();
+        shuffle(priority.begin(), priority.end(), mt19937(seed));
+    }
+    int& parent(int u) {
+        if (par[u] == u) return par[u];
+        while (weight[par[u]] <= weight[u]) {
+            size[par[u]] -= size[u];
+            par[u] = par[par[u]];
+        }
+        return par[u];
+    }
+    int find(int u, int w = INT_MAX - 1) {
+        while (weight[u] <= w) u = parent(u);
+        return u;
+    }
+    int get_size(int u) {
+        return size[find(u)];
+    }
+    void disconnect(int u) {
+        if (parent(u) != u) {
+            disconnect(parent(u));
+            size[parent(u)] -= size[u];
+        }
+    }
+    int connect(int u, int w = INT_MAX - 1) {
+        while (weight[u] <= w) {
+            size[parent(u)] += size[u];
+            u = parent(u);
+        }
+        return u;
+    }
+    void add_edge_unconnected(int u, int v, int w) {
+        disconnect(u);
+        disconnect(v);
+        while (u != v) {
+            u = connect(u, w);
+            v = connect(v, w);
+            if (priority[u] < priority[v]) swap(u, v);
+            int temp_parent = parent(v), temp_weight = weight[v];
+            parent(v) = u;
+            weight[v] = w;
+            u = temp_parent;
+            w = temp_weight;
+        }
+        connect(u);
+    }
+    int max_edge(int u, int v) {
+        if (find(u) != find(v)) return -1;
+        while (true) {
+            if (weight[u] > weight[v]) swap(u, v);
+            if (parent(u) == v) break;
+            u = parent(u);
+        }
+        return u;
+    }
+    void delete_parent(int u) {
+        int v = u;
+        while (parent(v) != v) {
+            v = parent(v);
+            size[v] -= size[u];
+        }
+        parent(u) = u;
+        weight[u] = INT_MAX;
+    }
+    int add_edge(int u, int v, int w) {
+        int p = max_edge(u, v);
+        if (p == -1) {
+            add_edge_unconnected(u, v, w);
+            return w;
+        } else if (weight[p] > w) {
+            int res = w - weight[p];
+            delete_parent(p);
+            add_edge_unconnected(u, v, w);
+            return res;
+        }
+        return 0;
+    }
+    void delete_edge(int u, int v, int w) {
+        int p = max_edge(u, v);
+        if (p != -1 && weight[p] == w) delete_parent(p);
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>weighted_dsu</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

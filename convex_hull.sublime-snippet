@@ -1,0 +1,28 @@
+<snippet>
+	<content><![CDATA[
+// Requires point
+template<typename T>
+vector<point<T>> convex_hull(vector<point<T>> p) {
+    sort(p.begin(), p.end());
+    p.erase(unique(p.begin(), p.end()), p.end());
+    int n = p.size();
+    if (n < 3) return p;
+    vector<point<T>> h = {p[0]};
+    for (int i = 1; i < n; ++i) {
+        while (h.size() > 1 && cross_product(h.end()[-1] - h.end()[-2], p[i] - h.end()[-2]) <= 0) h.pop_back();
+        h.emplace_back(p[i]);
+    }
+    int sz = h.size();
+    for (int i = n - 2; i >= 0; --i) {
+        while (h.size() > sz && cross_product(h.end()[-1] - h.end()[-2], p[i] - h.end()[-2]) <= 0) h.pop_back();
+        h.emplace_back(p[i]);
+    }
+    h.pop_back();
+    return h;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>convex_hull</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

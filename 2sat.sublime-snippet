@@ -1,0 +1,36 @@
+<snippet>
+	<content><![CDATA[
+// Requires tarjan_scc
+struct sat {
+    int n;
+    vector<bool> ans;
+    vector<vector<int>> adj;
+    sat(int n): n(n), ans(n), adj(n << 1) {}
+    void add_or(int a, bool va, int b, bool vb) {
+        int u = (a << 1) + va, v = (b << 1) + vb;
+        adj[u ^ 1].emplace_back(v);
+        adj[v ^ 1].emplace_back(u);
+    }
+    void add_xor(int a, bool va, int b, bool vb) {
+        add_or(a, va, b, vb);
+        add_or(a, !va, b, !vb);
+    }
+    void add_equal(int a, bool va, int b, bool vb) {
+        add_or(a, !va, b, vb);
+        add_or(a, va, b, !vb);
+    }
+    bool solve() {
+        vector<int> scc = tarjan_scc(n << 1, adj);
+        for (int i = 0; i < n; ++i) {
+            if (scc[i << 1] == scc[i << 1 | 1]) return false;
+            ans[i] = (scc[i << 1] > scc[i << 1 | 1]);
+        }
+        return true;
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>2sat</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

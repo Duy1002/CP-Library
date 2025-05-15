@@ -1,0 +1,58 @@
+<snippet>
+	<content><![CDATA[
+uint64_t hilbertorder(int x, int y) {
+    const int logn = __lg(max(x, y) * 2 + 1) | 1;
+    const int maxn = (1 << logn) - 1;
+    uint64_t res = 0;
+    for (int s = 1 << (logn - 1); s; s >>= 1) {
+        bool rx = x & s, ry = y & s;
+        res = (res << 2) | (rx ? ry ? 2 : 1 : ry ? 3 : 0);
+        if (!rx) {
+            if (ry) x ^= maxn, y ^= maxn;
+            swap(x, y);
+        }
+    }
+    return res;
+}
+struct query {
+    int l, r, id;
+    uint64_t w;
+    query() = default;
+    query(int l, int r, int id): l(l), r(r), id(id), w(hilbertorder(l, r)) {}
+    bool operator < (const query &o) const {
+        return w < o.w;
+    }
+};
+template<typename T1, typename T2, typename T3, typename T4, typename T5>
+struct mo_algorithm {
+    int L = 0, R = 0;
+    T1 add_left;
+    T2 add_right;
+    T3 delete_left;
+    T4 delete_right;
+    T5 &ans;
+    vector<query> q;
+    mo_algorithm(T1 add_left, T2 add_right, T3 delete_left, T4 delete_right, T5 &ans):
+        add_left(add_left), add_right(add_right), delete_left(delete_left), delete_right(delete_right), ans(ans) {}
+    void add_query(int l, int r) {
+        q.emplace_back(l, r, q.size());
+    }
+    vector<T5> solve() {
+        sort(q.begin(), q.end());
+        vector<T5> res(q.size());
+        for (auto &[l, r, id, w]: q) {
+            while (L < l) delete_left(L++);
+            while (L > l) add_left(--L);
+            while (R < r) add_right(R++);
+            while (R > r) delete_right(--R);
+            res[id] = ans;
+        }
+        return res;
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mo_algorithm</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

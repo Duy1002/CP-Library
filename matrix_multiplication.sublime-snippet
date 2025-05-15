@@ -1,0 +1,51 @@
+<snippet>
+	<content><![CDATA[
+const uint32_t mod = 998244353;
+const uint64_t modmod8 = 8ULL * mod * mod;
+struct matrix {
+    vector<vector<uint64_t>> a;
+    matrix() = default;
+    matrix(const vector<vector<uint64_t>> &_a): a(_a) {}
+    matrix(uint16_t r, uint16_t c): a(r, vector<uint64_t>(c, 0)) {}
+    auto& operator [] (uint16_t r) {
+        return a[r];
+    }
+    auto& operator [] (uint16_t r) const {
+        return a[r];
+    }
+    static matrix indentity(uint16_t n) {
+        matrix res(n, n);
+        for (uint16_t i = 0; i < n; ++i) res.a[i][i] = 1;
+        return res;
+    }
+    matrix operator * (const matrix &o) const {
+        assert(a[0].size() == o.a.size());
+        matrix res(a.size(), o.a[0].size());
+        uint16_t n = a.size(), m = o.a[0].size(), t = a[0].size();
+        for (uint16_t i = 0; i < n; ++i) {
+            for (uint16_t k = 0; k < t; ++k) {
+                for (uint16_t j = 0; j < m; ++j)
+                    res.a[i][j] += a[i][k] * o.a[k][j];
+                if (k % 8 == 0)
+                    for (uint16_t j = 0; j < m; ++j)
+                        res.a[i][j] = min(res.a[i][j], res.a[i][j] - modmod8);
+            }
+        }
+        for (uint16_t i = 0; i < n; ++i)
+            for (uint16_t j = 0; j < m; ++j)
+                res.a[i][j] %= mod;
+        return res;
+    }
+    matrix pow(uint64_t n) const {
+        assert(a.size() == a[0].size());
+        matrix x = *this, res = indentity(a.size());
+        for (; n; n >>= 1, x = x * x) if (n & 1) res = res * x;
+        return res;
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>matrix_multiplication</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

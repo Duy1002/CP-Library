@@ -1,0 +1,99 @@
+<snippet>
+	<content><![CDATA[
+// Requires point
+template<typename T>
+T squared_distance(const point<T> &a, const point<T> &b) {
+    return (a - b).squared_length();
+}
+template<typename T>
+double distance(const point<T> &a, const point<T> &b) {
+    return sqrt(squared_distance(a, b));
+}
+template<typename T>
+int sign(T x) {
+    return x < 0 ? -1 : (bool)x;
+}
+template<typename T>
+int location(const point<T> &p, const point<T> &a, const point<T> &b) {
+    return sign(cross_product(p - a, b - a));
+}
+template<typename T>
+bool on_segment(const point<T> &p, const point<T> &a, const point<T> &b) {
+    if (location(p, a, b)) return false;
+    return min(a.x, b.x) <= p.x && p.x <= max(a.x, b.x) && min(a.y, b.y) <= p.y && p.y <= max(a.y, b.y);
+}
+template<typename T>
+bool check_segment_intersect(const point<T> &a, const point<T> &b, const point<T> &c, const point<T> &d) {
+    if (location(c, a, b) * location(d, a, b) > 0) return false;
+    if (location(a, c, d) * location(b, c, d) > 0) return false;
+    if (max(a.x, b.x) < min(c.x, d.x)) return false;
+    if (max(a.y, b.y) < min(c.y, d.y)) return false;
+    if (max(c.x, d.x) < min(a.x, b.x)) return false;
+    if (max(c.y, d.y) < min(a.y, b.y)) return false;
+    return true; 
+}
+template<typename T>
+T polygon_signed_area2(const vector<point<T>> &v) {
+    int n = v.size();
+    T ans = cross_product(v[n - 1], v[0]);
+    for (int i = 0; i < n - 1; ++i) ans += cross_product(v[i], v[i + 1]);
+    return ans;
+}
+template<typename T>
+int in_polygon(const point<T> &p, const vector<point<T>> &v) {
+    int n = v.size();
+    for (int i = 0; i < n; ++i) {
+        int j = i + 1 < n ? i + 1 : 0;
+        if (on_segment(p, v[i], v[j])) return 0;
+    }
+    int ans = 0;
+    for (int i = 0; i < n; ++i) {
+        int j = i + 1 < n ? i + 1 : 0;
+        ans += (v[i].y <= p.y && p.y < v[j].y && location(p, v[i], v[j]) < 0);
+        ans += (v[j].y <= p.y && p.y < v[i].y && location(p, v[i], v[j]) > 0);
+    }
+    return ans % 2 ? 1 : -1;
+}
+template<typename T>
+vector<real_point> segment_intersect(const point<T> &a, const point<T> &b, const point<T> &c, const point<T> &d) {
+    if (!check_segment_intersect(a, b, c, d)) return {};
+    point ab = b - a, cd = d - c;
+    if (!cross_product(ab, cd)) {
+        vector<point<T>> v = {a, b, c, d};
+        sort(v.begin(), v.end());
+        if (v[1] == v[2]) return {real_point(v[1].x, v[1].y)};
+        return {real_point(v[1].x, v[1].y), real_point(v[2].x, v[2].y)};
+    }
+    double t = (double)cross_product(c - a, cd) / cross_product(ab, cd);
+    return {real_point(a.x + t * ab.x, a.y + t * ab.y)};
+}
+template<typename T>
+double distance_to_line(const point<T> &p, const point<T> &a, const point<T> &b) {
+    point<T> ap = p - a, ab = b - a;
+    return (double)abs(cross_product(ap, ab)) / distance(a, b);
+}
+template<typename T>
+double distance_to_segment(const point<T> &p, const point<T> &a, const point<T> &b) {
+    point<T> ap = p - a, ab = b - a;
+    if (dot_product(ap, ab) <= 0) return distance(p, a);
+    if (dot_product(p - b, a - b) <= 0) return distance(p, b);
+    return (double)abs(cross_product(ap, ab)) / distance(a, b);
+}
+template<typename T>
+int half(const point<T> &p) {
+    if (p.y < 0) return -1;
+    if (!p.y && p.x >= 0) return 0;
+    return 1;
+}
+template<typename T>
+bool cmp_arg(const point<T> &p1, const point<T> &p2) {
+    int half1 = half(p1), half2 = half(p2);
+    if (half1 != half2) return half1 < half2;
+    return cross_product(p1, p2) > 0;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>basic_geometry</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

@@ -1,0 +1,40 @@
+<snippet>
+	<content><![CDATA[
+// Requires minimum_stack
+template<typename T, typename TT>
+struct minimum_queue {
+    minimum_stack<T, TT> s1, s2;
+    TT op;
+    minimum_queue(TT op, T id): s1(op, id), s2(op, id), op(op) {}
+    int size() const {
+        return s1.size() + s2.size();
+    }
+    void balance() {
+        if (!s2.size()) {
+            while (s1.size()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+    }
+    T& front() {
+        balance();
+        return s2.top();
+    }
+    void push(const T &x) {
+        s1.push(x);
+    }
+    void pop() {
+        balance();
+        s2.pop();
+    }
+    T minimum() const {
+        return op(s1.minimum(), s2.minimum());
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>minimum_queue</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

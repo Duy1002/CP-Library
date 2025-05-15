@@ -1,0 +1,55 @@
+<snippet>
+	<content><![CDATA[
+// Requires point, basic_geometry
+template<typename T>
+bool continue_rotate(const point<T> &v, const point<T> &prv, const point<T> &cur, const point<T> &nxt) {
+    return sign(cross_product(v, cur - prv)) == sign(cross_product(v, nxt - cur));
+}
+template<typename T>
+vector<pair<int, int>> anti_podal_pairs(vector<point<T>> p) {
+    int n = p.size();
+    if (n < 2) return {};
+    if (n < 3) return {make_pair(0, 1)};
+    p.resize(n << 1);
+    for (int i = 0; i < n; ++i) p[i + n] = p[i];
+    vector<pair<int, int>> pairs;
+    vector<bool> vis(n);
+    for (int i = 0, j = 2; i < n; ++i) {
+        if (vis[i]) continue;
+        vis[i] = true;
+        point<T> v = p[i + 1] - p[i];
+        if (j <= i + 1) j = i + 2;
+        while (continue_rotate(v, p[j - 1], p[j], p[j + 1])) ++j;
+        int k = j >= n ? j - n : j;
+        int ni = i == n - 1 ? 0 : i + 1;
+        pairs.emplace_back(i, k);
+        pairs.emplace_back(ni, k);
+        if (!cross_product(v, p[k + 1] - p[k])) {
+            vis[k] = true;
+            int nk = k == n - 1 ? 0 : k + 1;
+            pairs.emplace_back(i, nk);
+            pairs.emplace_back(ni, nk);
+        }
+    }
+    return pairs;
+}
+template<typename T>
+double polygon_width(vector<point<T>> p) {
+    int n = p.size();
+    p.resize(n << 1);
+    for (int i = 0; i < n; ++i) p[i + n] = p[i];
+    double ans = numeric_limits<double>::max();
+    for (int i = 0, j = 2; i < n; ++i) {
+        integer_point v = p[i + 1] - p[i];
+        if (j <= i + 1) j = i + 2;
+        while (continue_rotate(v, p[j - 1], p[j], p[j + 1])) ++j;
+        ans = min(ans, distance_to_line(p[j], p[i], p[i + 1]));
+    }
+    return ans;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>rotating_calipers</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

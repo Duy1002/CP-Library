@@ -1,0 +1,31 @@
+<snippet>
+	<content><![CDATA[
+template<typename T, typename TT>
+struct minimum_stack {
+    vector<pair<T, T>> s;
+    TT op;
+    T id;
+    minimum_stack(TT op, T id): op(op), id(id) {}
+    int size() const {
+        return s.size();
+    }
+    T& top() {
+        return s.back().first;
+    }
+    void push(const T &x) {
+        s.emplace_back(x, s.size() ? op(s.back().second, x) : x);
+    }
+    void pop() {
+        s.pop_back();
+    }
+    T minimum() const {
+        if (!s.size()) return id;
+        return s.back().second;
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>minimum_stack</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

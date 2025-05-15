@@ -1,0 +1,26 @@
+<snippet>
+	<content><![CDATA[
+vector<int> tarjan_scc(int n, const vector<vector<int>> &adj) {
+    int time_dfs = 0, p = 0, num = 0;
+    vector<int> tin(n), low(n), s(n), scc(n, -1);
+    auto dfs = [&] (auto &&dfs, int u) -> void {
+        tin[u] = low[u] = ++time_dfs;
+        s[p++] = u;
+        for (auto &v: adj[u]) {
+            if (!tin[v]) dfs(dfs, v);
+            if (scc[v] < 0) low[u] = min(low[u], low[v]);
+        }
+        if (tin[u] == low[u]) {
+            while (scc[u] < 0) scc[s[--p]] = num;
+            ++num;
+        }
+    };
+    for (int i = 0; i < n; ++i) if (!tin[i]) dfs(dfs, i);
+    return scc;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>tarjan_scc</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

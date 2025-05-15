@@ -1,0 +1,44 @@
+<snippet>
+	<content><![CDATA[
+template<typename T>
+struct range_minimum_query {
+    vector<T> a;
+    vector<unsigned int> mask;
+    vector<vector<T>> sparse_table;
+    void build(const vector<T> &_a) {
+        a = _a;
+        int n = a.size();
+        int m = n >> 5;
+        int lg = m ? __lg(m) : -1;
+        mask.resize(n);
+        sparse_table.resize(lg + 1, vector<T>(m));
+        unsigned int current_mask = 0;
+        for (int i = n - 1; i >= 0; --i) {
+            current_mask <<= 1;
+            while (current_mask && a[i] <= a[i + __builtin_ctz(current_mask)]) current_mask ^= current_mask & -current_mask;
+            current_mask |= 1;
+            mask[i] = current_mask;
+        }
+        for (int i = 0; i < m; ++i) sparse_table[0][i] = a[(i << 5) + __lg(mask[i << 5])];
+        for (int i = 1; i <= lg; ++i)
+            for (int j = 0; j + (1 << i) <= m; ++j)
+                sparse_table[i][j] = min(sparse_table[i - 1][j], sparse_table[i - 1][j + (1 << (i - 1))]);
+    }
+    T query(int l, int r) const {
+        if (r - l <= 32) return a[l + __lg(mask[l] & ((1LL << (r - l)) - 1))];
+        T res = min(a[l + __lg(mask[l])], a[r - 32 + __lg(mask[r - 32])]);
+        int x = (l >> 5) + 1;
+        int y = (r - 1) >> 5;
+        if (x < y) {
+            int k = __lg(y - x);
+            res = min(res, min(sparse_table[k][x], sparse_table[k][y - (1 << k)]));
+        }
+        return res;
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>range_minimum_query</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

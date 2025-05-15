@@ -1,0 +1,50 @@
+<snippet>
+	<content><![CDATA[
+#include "bits/stdc++.h"
+#ifdef LOCAL
+#include "windows.h"
+#include "psapi.h"
+#endif
+using namespace std;
+bool Multitest();
+void Init();
+void Nguyen_Tuong_Duy();
+int main() {
+    cin.tie(0)->sync_with_stdio(0);
+    cin.exceptions(ios::badbit | ios::failbit);
+    #ifdef LOCAL
+        PROCESS_MEMORY_COUNTERS pmc;
+        auto start_time = chrono::high_resolution_clock::now();
+        GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+        auto start_memory = pmc.PeakWorkingSetSize;
+    #endif
+    int TEST = 1;
+    if (Multitest()) cin >> TEST;
+    Init();
+    while (TEST--) Nguyen_Tuong_Duy();
+    #ifdef LOCAL
+        auto end_time = chrono::high_resolution_clock::now();
+        GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+        auto end_memory = pmc.PeakWorkingSetSize;
+        auto used_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+        auto used_memory = (end_memory - start_memory) / 1048576.0;
+        cerr << "\nUsed: " << used_time << " ms, ";
+        cerr << fixed << setprecision(3) << used_memory << " MB\n\n";
+    #endif
+}
+
+bool Multitest() {
+    return 0;
+}
+
+void Init() {
+}
+
+void Nguyen_Tuong_Duy() {
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>template</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
