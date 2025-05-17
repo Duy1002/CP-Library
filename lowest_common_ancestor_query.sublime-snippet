@@ -4,7 +4,7 @@
 struct lowest_common_ancestor_query {
     vector<int> tin, depth;
     range_minimum_query<pair<int, int>> rmq;
-    void build(int n, int s, const vector<vector<int>> &adj) {
+    void build(int n, const vector<vector<int>> &adj, int s) {
         tin.resize(n);
         depth.resize(n);
         vector<pair<int, int>> tour;

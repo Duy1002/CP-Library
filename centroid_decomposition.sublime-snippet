@@ -1,0 +1,39 @@
+<snippet>
+	<content><![CDATA[
+vector<vector<int>> centroid_decomposition(int n, const vector<vector<int>> &adj, int &root) {
+    vector<vector<int>> ct(n);
+    vector<int> sz(n);
+    vector<bool> del(n);
+    auto get_size = [&] (auto &&get_size, int u, int p) -> void {
+        sz[u] = 1;
+        for (auto &v: adj[u]) {
+            if (v != p && !del[v]) {
+                get_size(get_size, v, u);
+                sz[u] += sz[v];
+            }
+        }
+    };
+    auto find_centroid = [&] (auto &&find_centroid, int u, int p, int N) -> int {
+        for (auto &v: adj[u])
+            if (v != p && !del[v] && sz[v] > N)
+                return find_centroid(find_centroid, v, u, N);
+        return u;
+    };
+    auto centroid_decompose = [&] (auto &&centroid_decompose, int u) -> int {
+        get_size(get_size, u, u);
+        int r = find_centroid(find_centroid, u, u, sz[u] >> 1);
+        del[r] = 1;
+        for (auto &v: adj[r])
+            if (!del[v])
+                ct[r].emplace_back(centroid_decompose(centroid_decompose, v));
+        return r;
+    };
+    root = centroid_decompose(centroid_decompose, 0);
+    return ct;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>centroid_decomposition</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
