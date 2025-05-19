@@ -8,10 +8,10 @@ struct lowest_common_ancestor_query {
         tin.resize(n);
         depth.resize(n);
         vector<pair<int, int>> tour;
-        auto dfs = [&] (auto &&dfs, int u, int par) -> void {
+        auto dfs = [&] (auto &&dfs, int u, int p) -> void {
             tin[u] = tour.size();
             tour.emplace_back(depth[u], u);
-            for (auto &v: adj[u]) if (v != par) {
+            for (auto &v: adj[u]) if (v != p) {
                 depth[v] = depth[u] + 1;
                 dfs(dfs, v, u);
                 tour.emplace_back(depth[u], u);

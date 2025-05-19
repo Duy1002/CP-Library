@@ -39,19 +39,6 @@ vector<int> incremental_scc(int N, vector<pair<int, int>> e) {
     dnc(dnc, 0, m, N, id.begin(), id.end());
     return sc;
 }
-vector<array<int, 3>> scc_sort(int n, const vector<pair<int, int>> &e) {
-    int m = e.size();
-    vector<int> sc = incremental_scc(n, e), cnt(m + 1);
-    vector<array<int, 3>> escc(m);
-    for (auto &i: sc) ++cnt[i];
-    for (int i = 0, s = 0; i <= m; ++i) {
-        int tmp = cnt[i];
-        cnt[i] = s;
-        s += tmp;
-    }
-    for (int i = 0; i < m; ++i) escc[cnt[sc[i]]++] = {e[i].first, e[i].second, sc[i]};
-    return escc;
-}
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>incremental_scc</tabTrigger>
