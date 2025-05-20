@@ -18,7 +18,7 @@ struct dsu {
     bool connected(int u, int v) {
         return find(u) == find(v);
     }
-    int size(int u) {
+    int get_size(int u) {
         return -lab[find(u)];
     }
 };
