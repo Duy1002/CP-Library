@@ -44,7 +44,7 @@ struct segment_tree {
     }
     template<typename F>
     int lower_bound(F f) const {
-        if (f(t[1])) return n;
+        if (f(t[1])) return -1;
         int i = 1;
         while (i < n) i = f(t[i << 1]) ? i << 1 | 1 : i << 1;
         return i - n;
