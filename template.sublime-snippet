@@ -28,8 +28,8 @@ int main() {
         auto end_memory = pmc.PeakWorkingSetSize;
         auto used_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
         auto used_memory = (end_memory - start_memory) / 1048576.0;
-        cerr << "\nUsed: " << used_time << " ms, ";
-        cerr << fixed << setprecision(3) << used_memory << " MB\n\n";
+        cout << "\n=====\nUsed: " << used_time << " ms, ";
+        cout << fixed << setprecision(3) << used_memory << " MB";
     #endif
 }
 

@@ -8,10 +8,10 @@ vector<int> tarjan_scc(int n, const vector<vector<int>> &adj) {
         s[p++] = u;
         for (auto &v: adj[u]) {
             if (!tin[v]) dfs(dfs, v);
-            if (scc[v] < 0) low[u] = min(low[u], low[v]);
+            if (scc[v] == -1) low[u] = min(low[u], low[v]);
         }
         if (tin[u] == low[u]) {
-            while (scc[u] < 0) scc[s[--p]] = num;
+            while (scc[u] == -1) scc[s[--p]] = num;
             ++num;
         }
     };
