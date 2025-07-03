@@ -1,0 +1,76 @@
+<snippet>
+	<content><![CDATA[
+template<int mod> struct static_modint {
+    int value;
+    static_modint(const long long &v = 0) {
+        value = v % mod;
+        if (value < 0) value += mod;
+    }
+    static_modint(const long long &a, const long long &b): value(0) {
+        *this += a;
+        *this /= b;
+    }
+    static_modint& operator += (const static_modint &b) {
+        value += b.value;
+        if (value >= mod) value -= mod;
+        return *this;
+    }
+    static_modint& operator -= (const static_modint &b) {
+        value -= b.value;
+        if (value < 0) value += mod;
+        return *this;
+    }
+    static_modint& operator *= (const static_modint &b) {
+        value = (long long)value * b.value % mod;
+        return *this;
+    }
+    friend static_modint mexp(static_modint a, long long e) {
+        static_modint res = 1;
+        for (; e; a *= a, e >>= 1) if (e & 1) res *= a;
+        return res;
+    }
+    friend static_modint inverse(const static_modint &a) {
+        return mexp(a, mod - 2);
+    }
+    static_modint& operator /= (const static_modint &b) {
+        return *this *= inverse(b);
+    }
+    friend static_modint operator + (static_modint a, const static_modint &b) {
+        return a += b;
+    }
+    friend static_modint operator - (static_modint a, const static_modint &b) {
+        return a -= b;
+    }
+    friend static_modint operator - (const static_modint &a) {
+        return 0 - a;
+    }
+    friend static_modint operator * (static_modint a, const static_modint &b) {
+        return a *= b;
+    }
+    friend static_modint operator / (static_modint a, const static_modint &b) {
+        return a /= b;
+    }
+    friend istream& operator >> (istream &is, static_modint &a) {
+        long long v;
+        is >> v;
+        a = static_modint(v);
+        return is;
+    }
+    friend ostream& operator << (ostream &os, const static_modint &a) {
+        return os << a.value;
+    }
+    friend bool operator == (const static_modint &a, const static_modint &b) {
+        return a.value == b.value;
+    }
+    friend bool operator != (const static_modint &a, const static_modint &b) {
+        return a.value != b.value;
+    }
+};
+const int mod = 1e9 + 7;
+using modint = static_modint<mod>;
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>modint</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
