@@ -2,18 +2,18 @@
     <content><![CDATA[
 template<typename T, typename TT>
 struct segment_tree {
-    int n, m;
+    int n;
     vector<T> t;
     TT op;
     T id;
     segment_tree(TT op, T id): op(op), id(id) {}
-    void build(int _m) {
-        m = _m;
+    void build(int m) {
         n = 1 << (__lg(m) + 1);
         t.assign(n << 1, id);
     }
     void build(const vector<T> &a) {
-        build(a.size());
+        int m = a.size();
+        build(m);
         for (int i = 0; i < m; ++i) t[i + n] = a[i];
         for (int i = n; --i;) t[i] = op(t[i << 1], t[i << 1 | 1]);
     }
@@ -44,7 +44,7 @@ struct segment_tree {
     }
     template<typename F>
     int lower_bound(F f) const {
-        if (f(t[1])) return m;
+        if (f(t[1])) return -1;
         int i = 1;
         while (i < n) i = f(t[i << 1]) ? i << 1 | 1 : i << 1;
         return i - n;

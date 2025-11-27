@@ -6,22 +6,17 @@
 #include <psapi.h>
 #endif
 using namespace std;
-bool Multitest();
-void Init();
-void Nguyen_Tuong_Duy();
+void khac();
 int main() {
     cin.tie(0)->sync_with_stdio(0);
     cin.exceptions(ios::badbit | ios::failbit);
     #ifdef LOCAL
         PROCESS_MEMORY_COUNTERS pmc;
-        auto start_time = chrono::high_resolution_clock::now();
         GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
         auto start_memory = pmc.PeakWorkingSetSize;
+        auto start_time = chrono::high_resolution_clock::now();
     #endif
-    int TEST = 1;
-    if (Multitest()) cin >> TEST;
-    Init();
-    while (TEST--) Nguyen_Tuong_Duy();
+    khac();
     #ifdef LOCAL
         auto end_time = chrono::high_resolution_clock::now();
         GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
@@ -33,14 +28,7 @@ int main() {
     #endif
 }
 
-bool Multitest() {
-    return 0;
-}
-
-void Init() {
-}
-
-void Nguyen_Tuong_Duy() {
+void khac() {
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
