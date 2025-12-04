@@ -6,10 +6,6 @@ template<int mod> struct static_modint {
         value = v % mod;
         if (value < 0) value += mod;
     }
-    static_modint(const long long &a, const long long &b): value(0) {
-        *this += a;
-        *this /= b;
-    }
     static_modint& operator += (const static_modint &b) {
         value += b.value;
         if (value >= mod) value -= mod;

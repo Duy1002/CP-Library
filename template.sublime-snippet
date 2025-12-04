@@ -6,6 +6,64 @@
 #include <psapi.h>
 #endif
 using namespace std;
+template<typename T>
+istream& operator >> (istream &is, vector<T> &v) {
+    for (auto &i: v) is >> i;
+    return is;
+}
+template<typename F, typename S>
+istream& operator >> (istream &is, pair<F, S> &p) {
+    return is >> p.first >> p.second;
+}
+template<typename... Ts>
+istream& operator >> (istream &is, tuple<Ts...> &t) {
+    std::apply([&](auto&... elems) {((is >> elems), ...);}, t);
+    return is;
+}
+template<typename T>
+ostream& operator << (ostream &os, const vector<T> &v) {
+    string s;
+    for (const auto &i: v) os << s << i, s = " ";
+    return os;
+}
+template<typename T>
+ostream& operator << (ostream &os, const vector<vector<T>> &v) {
+    string s;
+    for (const auto &i: v) os << s << i, s = "\n";
+    return os;
+}
+template<typename F, typename S>
+ostream& operator << (ostream &os, const pair<F, S> &p) {
+    return os << p.first << ' ' << p.second;
+}
+template<typename... Ts>
+ostream& operator << (ostream &os, const tuple<Ts...> &t) {
+    string s;
+    std::apply([&](const auto&... elems) {((os << s << elems, s = " "), ...);}, t);
+    return os;
+}
+template<typename T>
+auto make_vector(const size_t &n) {
+    return vector<T>(n);
+}
+template<typename T, typename... Args>
+auto make_vector(const size_t &n, const Args&... args) {
+    return vector<decltype(make_vector<T>(args...))>(n, make_vector<T>(args...));
+}
+template<typename T>
+auto make_filled_vector(const size_t &n, const T &val) {
+    return vector<T>(n, val);
+}
+template<typename T, typename... Args>
+auto make_filled_vector(const size_t &n, const Args&... args) {
+    return vector<decltype(make_filled_vector<T>(args...))>(n, make_filled_vector<T>(args...));
+}
+template<typename T, size_t N>
+struct vec { using type = vector<typename vec<T, N - 1>::type>; };
+template<typename T>
+struct vec<T, 1> { using type = vector<T>; };
+template<typename T, size_t N>
+using vector_type = typename vec<T, N>::type;
 void khac();
 int main() {
     cin.tie(0)->sync_with_stdio(0);
