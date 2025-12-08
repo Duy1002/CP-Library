@@ -23,6 +23,9 @@ istream& operator >> (istream &is, unsigned __int128 &x) {
     x = read_uint128(s.begin(), s.end());
     return is;
 }
+template<typename T> istream& operator >> (istream &is, vector<T> &v);
+template<typename F, typename S> istream& operator >> (istream &is, pair<F, S> &p);
+template<typename... Ts> istream& operator >> (istream &is, tuple<Ts...> &t);
 template<typename T>
 istream& operator >> (istream &is, vector<T> &v) {
     for (auto &i: v) is >> i;
@@ -51,17 +54,30 @@ ostream& operator << (ostream &os, const __int128 &x) {
 ostream& operator << (ostream &os, const unsigned __int128 &x) {
     return print_uint128(os, x);
 }
+template<typename T> ostream& operator << (ostream &os, const vector<T> &v);
+template<typename F, typename S> ostream& operator << (ostream &os, const pair<F, S> &p);
+template<typename... Ts> ostream& operator << (ostream &os, const tuple<Ts...> &t);
 template<typename T>
-ostream& operator << (ostream &os, const vector<T> &v) {
+ostream& print_vector(ostream &os, const vector<T> &v, const string &sep) {
     string s;
-    for (const auto &i: v) os << s << i, s = " ";
+    for (const auto &i: v) os << s << i, s = sep;
     return os;
 }
 template<typename T>
+ostream& operator << (ostream &os, const vector<T> &v) {
+    return print_vector(os, v, " ");
+}
+template<typename F, typename S>
+ostream& operator << (ostream &os, const vector<pair<F, S>> &v) {
+    return print_vector(os, v, "\n");
+}
+template<typename... Ts>
+ostream& operator << (ostream &os, const vector<tuple<Ts...>> &v) {
+    return print_vector(os, v, "\n");
+}
+template<typename T>
 ostream& operator << (ostream &os, const vector<vector<T>> &v) {
-    string s;
-    for (const auto &i: v) os << s << i, s = "\n";
-    return os;
+    return print_vector(os, v, "\n");
 }
 template<typename F, typename S>
 ostream& operator << (ostream &os, const pair<F, S> &p) {
