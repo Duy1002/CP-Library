@@ -1,0 +1,22 @@
+<snippet>
+	<content><![CDATA[
+pair<vector<int>, vector<int>> prime_sieve(int n) {
+    vector<int> lp(n + 1), prime;
+    for (int i = 2; i <= n; ++i) {
+        if (!lp[i]) {
+            lp[i] = i;
+            prime.emplace_back(i);
+        }
+        for (int j = 0; i * prime[j] <= n; ++j) {
+            lp[i * prime[j]] = prime[j];
+            if (prime[j] == lp[i]) break;
+        }
+    }
+    return make_pair(lp, prime);
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>prime_sieve</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
