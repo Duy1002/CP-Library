@@ -1,0 +1,41 @@
+<snippet>
+	<content><![CDATA[
+// Requires modint
+struct combinatorics {
+    vector<modint> fact, inv, inv_fact;
+    combinatorics(): fact({1, 1}), inv({0, 1}), inv_fact({1, 1}) {}
+    void resize(int n) {
+        int m = fact.size();
+        if (m <= n) {
+            fact.resize(n + 1);
+            inv.resize(n + 1);
+            inv_fact.resize(n + 1);
+            for (int i = m; i <= n; ++i) {
+                fact[i] = fact[i - 1] * i;
+                inv[i] = mod - mod / i * inv[mod % i];
+                inv_fact[i] = inv_fact[i - 1] * inv[i];
+            }
+        }
+    }
+    modint C(int n, int k) {
+        if (n < k || k < 0) return 0;
+        resize(n);
+        return fact[n] * inv_fact[k] * inv_fact[n - k];
+    }
+    modint catalan(int n) {
+        if (n < 0) return 0;
+        resize(n << 1);
+        return fact[n << 1] * inv_fact[n] * inv_fact[n + 1];
+    }
+    modint ballot(int open, int close) {
+        if (open < close || close < 0) return 0;
+        resize(open + close);
+        return C(open + close, close) - C(open + close, close - 1);
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>combinatorics</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
