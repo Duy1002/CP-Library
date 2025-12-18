@@ -21,7 +21,7 @@ vector<vector<int>> automaton(string s, const vector<int> &pi) {
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>Knuth_Morris_Pratt</tabTrigger>
+	<tabTrigger>snippet_Knuth_Morris_Pratt</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

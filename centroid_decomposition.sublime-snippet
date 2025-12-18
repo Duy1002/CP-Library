@@ -33,7 +33,7 @@ vector<vector<int>> centroid_decomposition(int n, const vector<vector<int>> &adj
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>centroid_decomposition</tabTrigger>
+	<tabTrigger>snippet_centroid_decomposition</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

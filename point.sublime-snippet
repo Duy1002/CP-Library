@@ -42,7 +42,7 @@ using integer_point = point<long long>;
 using real_point = point<double>;
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>point</tabTrigger>
+	<tabTrigger>snippet_point</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

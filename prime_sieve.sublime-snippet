@@ -16,7 +16,7 @@ pair<vector<int>, vector<int>> prime_sieve(int n) {
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>prime_sieve</tabTrigger>
+	<tabTrigger>snippet_prime_sieve</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

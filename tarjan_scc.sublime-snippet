@@ -20,7 +20,7 @@ vector<int> tarjan_scc(int n, const vector<vector<int>> &adj) {
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>tarjan_scc</tabTrigger>
+	<tabTrigger>snippet_tarjan_scc</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

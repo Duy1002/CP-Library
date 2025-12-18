@@ -93,7 +93,7 @@ bool cmp_arg(const point<T> &p1, const point<T> &p2) {
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>basic_geometry</tabTrigger>
+	<tabTrigger>snippet_basic_geometry</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

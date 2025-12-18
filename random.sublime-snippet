@@ -7,7 +7,7 @@ uniform_int_distribution<>(l, r)(rng);
 uniform_real_distribution<>(l, r)(rng);
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>random</tabTrigger>
+	<tabTrigger>snippet_random</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

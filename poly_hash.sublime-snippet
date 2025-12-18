@@ -45,7 +45,7 @@ struct poly_hash {
 };
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>poly_hash</tabTrigger>
+	<tabTrigger>snippet_poly_hash</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

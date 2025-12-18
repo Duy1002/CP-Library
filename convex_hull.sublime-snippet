@@ -22,7 +22,7 @@ vector<point<T>> convex_hull(vector<point<T>> p) {
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>convex_hull</tabTrigger>
+	<tabTrigger>snippet_convex_hull</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>

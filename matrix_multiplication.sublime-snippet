@@ -45,7 +45,7 @@ struct matrix {
 };
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>matrix_multiplication</tabTrigger>
+	<tabTrigger>snippet_matrix_multiplication</tabTrigger>
 	<!-- Optional: Set a scope to limit where the snippet will trigger -->
 	<scope>source.c++</scope>
 </snippet>
