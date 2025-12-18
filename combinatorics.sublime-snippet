@@ -2,30 +2,40 @@
 	<content><![CDATA[
 // Requires modint
 struct combinatorics {
-    vector<modint> fact, inv, inv_fact;
-    combinatorics(): fact({1, 1}), inv({0, 1}), inv_fact({1, 1}) {}
+    vector<modint> f, inv, invf;
+    combinatorics(): f({1, 1}), inv({0, 1}), invf({1, 1}) {}
     void resize(int n) {
-        int m = fact.size();
+        int m = f.size();
         if (m <= n) {
-            fact.resize(n + 1);
+            f.resize(n + 1);
             inv.resize(n + 1);
-            inv_fact.resize(n + 1);
+            invf.resize(n + 1);
             for (int i = m; i <= n; ++i) {
-                fact[i] = fact[i - 1] * i;
+                f[i] = f[i - 1] * i;
                 inv[i] = mod - mod / i * inv[mod % i];
-                inv_fact[i] = inv_fact[i - 1] * inv[i];
+                invf[i] = invf[i - 1] * inv[i];
             }
         }
+    }
+    modint factorial(int n) {
+        if (n < 0) return 0;
+        resize(n);
+        return f[n];
+    }
+    modint inverse_factorial(int n) {
+        if (n < 0) return 0;
+        resize(n);
+        return invf[n];
     }
     modint C(int n, int k) {
         if (n < k || k < 0) return 0;
         resize(n);
-        return fact[n] * inv_fact[k] * inv_fact[n - k];
+        return f[n] * invf[k] * invf[n - k];
     }
     modint catalan(int n) {
         if (n < 0) return 0;
         resize(n << 1);
-        return fact[n << 1] * inv_fact[n] * inv_fact[n + 1];
+        return f[n << 1] * invf[n] * invf[n + 1];
     }
     modint ballot(int open, int close) {
         if (open < close || close < 0) return 0;

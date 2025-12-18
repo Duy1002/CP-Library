@@ -2,21 +2,21 @@
 	<content><![CDATA[
 template<int mod> struct static_modint {
     int value;
-    static_modint(const long long &v = 0) {
+    static_modint(long long v = 0) {
         value = v % mod;
         if (value < 0) value += mod;
     }
-    static_modint& operator += (const static_modint &b) {
+    static_modint& operator += (static_modint b) {
         value += b.value;
         if (value >= mod) value -= mod;
         return *this;
     }
-    static_modint& operator -= (const static_modint &b) {
+    static_modint& operator -= (static_modint b) {
         value -= b.value;
         if (value < 0) value += mod;
         return *this;
     }
-    static_modint& operator *= (const static_modint &b) {
+    static_modint& operator *= (static_modint b) {
         value = (long long)value * b.value % mod;
         return *this;
     }
@@ -25,25 +25,25 @@ template<int mod> struct static_modint {
         for (; e; a *= a, e >>= 1) if (e & 1) res *= a;
         return res;
     }
-    friend static_modint inverse(const static_modint &a) {
+    friend static_modint inverse(static_modint a) {
         return mexp(a, mod - 2);
     }
-    static_modint& operator /= (const static_modint &b) {
+    static_modint& operator /= (static_modint b) {
         return *this *= inverse(b);
     }
-    friend static_modint operator + (static_modint a, const static_modint &b) {
+    friend static_modint operator + (static_modint a, static_modint b) {
         return a += b;
     }
-    friend static_modint operator - (static_modint a, const static_modint &b) {
+    friend static_modint operator - (static_modint a, static_modint b) {
         return a -= b;
     }
-    friend static_modint operator - (const static_modint &a) {
+    friend static_modint operator - (static_modint a) {
         return 0 - a;
     }
-    friend static_modint operator * (static_modint a, const static_modint &b) {
+    friend static_modint operator * (static_modint a, static_modint b) {
         return a *= b;
     }
-    friend static_modint operator / (static_modint a, const static_modint &b) {
+    friend static_modint operator / (static_modint a, static_modint b) {
         return a /= b;
     }
     friend istream& operator >> (istream &is, static_modint &a) {
@@ -52,13 +52,13 @@ template<int mod> struct static_modint {
         a = static_modint(v);
         return is;
     }
-    friend ostream& operator << (ostream &os, const static_modint &a) {
+    friend ostream& operator << (ostream &os, static_modint a) {
         return os << a.value;
     }
-    friend bool operator == (const static_modint &a, const static_modint &b) {
+    friend bool operator == (static_modint a, static_modint b) {
         return a.value == b.value;
     }
-    friend bool operator != (const static_modint &a, const static_modint &b) {
+    friend bool operator != (static_modint a, static_modint b) {
         return a.value != b.value;
     }
 };

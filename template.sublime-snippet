@@ -6,29 +6,47 @@
 #include <psapi.h>
 #endif
 using namespace std;
-unsigned __int128 read_uint128(string::iterator b, const string::iterator &e) {
+template<typename T>
+struct is_pair: false_type{};
+template<typename F, typename S>
+struct is_pair<pair<F, S>>: true_type{};
+template<typename T>
+concept Pair = is_pair<remove_cvref_t<T>>::value;
+template<typename T>
+struct is_tuple: false_type{};
+template<typename... Ts>
+struct is_tuple<tuple<Ts...>>: true_type{};
+template<typename T>
+concept Tuple = is_tuple<remove_cvref_t<T>>::value;
+template<typename T>
+concept Range = ranges::range<T> && !is_convertible_v<T, string_view>;
+template<typename T>
+concept Composite = Range<T> || Pair<T> || Tuple<T>;
+unsigned __int128 read_uint128(string_view sv) {
     unsigned __int128 x = 0;
-    for (; b != e; ++b) x = x * 10 + (*b - '0');
+    for (char c: sv) x = x * 10 + (c - '0');
     return x;
 }
 istream& operator >> (istream &is, __int128 &x) {
     string s;
     is >> s;
-    x = s[0] == '-' ? -read_uint128(s.begin() + 1, s.end()) : read_uint128(s.begin(), s.end());
+    if (s[0] == '-') x = -read_uint128(string_view(s).substr(1));
+    else if (s[0] == '+') x = read_uint128(string_view(s).substr(1));
+    else x = read_uint128(string_view(s));
     return is;
 }
 istream& operator >> (istream &is, unsigned __int128 &x) {
     string s;
     is >> s;
-    x = read_uint128(s.begin(), s.end());
+    x = read_uint128(string_view(s));
     return is;
 }
-template<typename T> istream& operator >> (istream &is, vector<T> &v);
+template<Range R> istream& operator >> (istream &is, R &r);
 template<typename F, typename S> istream& operator >> (istream &is, pair<F, S> &p);
 template<typename... Ts> istream& operator >> (istream &is, tuple<Ts...> &t);
-template<typename T>
-istream& operator >> (istream &is, vector<T> &v) {
-    for (auto &i: v) is >> i;
+template<Range R>
+istream& operator >> (istream &is, R &r) {
+    for (auto &i: r) is >> i;
     return is;
 }
 template<typename F, typename S>
@@ -37,7 +55,7 @@ istream& operator >> (istream &is, pair<F, S> &p) {
 }
 template<typename... Ts>
 istream& operator >> (istream &is, tuple<Ts...> &t) {
-    std::apply([&](auto&... elems) {((is >> elems), ...);}, t);
+    apply([&](auto&... elems) {((is >> elems), ...);}, t);
     return is;
 }
 ostream& print_uint128(ostream &os, const unsigned __int128 &x) {
@@ -54,30 +72,18 @@ ostream& operator << (ostream &os, const __int128 &x) {
 ostream& operator << (ostream &os, const unsigned __int128 &x) {
     return print_uint128(os, x);
 }
-template<typename T> ostream& operator << (ostream &os, const vector<T> &v);
+template<Range R> ostream& operator << (ostream &os, R &&r);
 template<typename F, typename S> ostream& operator << (ostream &os, const pair<F, S> &p);
 template<typename... Ts> ostream& operator << (ostream &os, const tuple<Ts...> &t);
-template<typename T>
-ostream& print_vector(ostream &os, const vector<T> &v, const string &sep) {
+template<Range R>
+ostream& operator << (ostream &os, R &&r) {
     string s;
-    for (const auto &i: v) os << s << i, s = sep;
+    for (auto &&i: r) {
+        os << s << i;
+        if constexpr (Composite<decltype(i)>) s = "\n";
+        else s = " ";
+    }
     return os;
-}
-template<typename T>
-ostream& operator << (ostream &os, const vector<T> &v) {
-    return print_vector(os, v, " ");
-}
-template<typename F, typename S>
-ostream& operator << (ostream &os, const vector<pair<F, S>> &v) {
-    return print_vector(os, v, "\n");
-}
-template<typename... Ts>
-ostream& operator << (ostream &os, const vector<tuple<Ts...>> &v) {
-    return print_vector(os, v, "\n");
-}
-template<typename T>
-ostream& operator << (ostream &os, const vector<vector<T>> &v) {
-    return print_vector(os, v, "\n");
 }
 template<typename F, typename S>
 ostream& operator << (ostream &os, const pair<F, S> &p) {
@@ -86,23 +92,23 @@ ostream& operator << (ostream &os, const pair<F, S> &p) {
 template<typename... Ts>
 ostream& operator << (ostream &os, const tuple<Ts...> &t) {
     string s;
-    std::apply([&](const auto&... elems) {((os << s << elems, s = " "), ...);}, t);
+    apply([&](const auto&... elems) {((os << s << elems, s = " "), ...);}, t);
     return os;
 }
 template<typename T>
-auto make_vector(const size_t &n) {
+auto make_vector(size_t n) {
     return vector<T>(n);
 }
 template<typename T, typename... Args>
-auto make_vector(const size_t &n, const Args&... args) {
+auto make_vector(size_t n, const Args&... args) {
     return vector<decltype(make_vector<T>(args...))>(n, make_vector<T>(args...));
 }
 template<typename T>
-auto make_filled_vector(const size_t &n, const T &val) {
+auto make_filled_vector(size_t n, const T &val) {
     return vector<T>(n, val);
 }
 template<typename T, typename... Args>
-auto make_filled_vector(const size_t &n, const Args&... args) {
+auto make_filled_vector(size_t n, const Args&... args) {
     return vector<decltype(make_filled_vector<T>(args...))>(n, make_filled_vector<T>(args...));
 }
 template<typename T, size_t N>
