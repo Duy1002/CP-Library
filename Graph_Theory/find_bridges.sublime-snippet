@@ -4,10 +4,13 @@
 template<typename T>
 vector<bool> find_bridges(const graph<T> &g) {
     int n = g.V(), m = g.E(), time_dfs = 0;
-    vector<int> num(n), low(n);
+    vector<int> num(n), low(n), cnt(n);
     vector<bool> is_bridge(m, true);
     auto dfs = [&] (auto &&dfs, int u, int p) -> void {
         num[u] = low[u] = ++time_dfs;
+        for (auto v: g.neighbors(u)) ++cnt[v];
+        for (auto [v, i]: g.neighbors_index(u)) if (cnt[v] > 1) is_bridge[i] = false;
+        for (auto v: g.neighbors(u)) cnt[v] = 0;
         for (auto [v, i]: g.neighbors_index(u)) {
             if (!num[v]) {
                 dfs(dfs, v, u);
