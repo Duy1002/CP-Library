@@ -1,0 +1,112 @@
+<snippet>
+	<content><![CDATA[
+template<typename T = void>
+struct graph {
+    struct edge {
+        int u, v;
+        T w;
+        edge() = default;
+        edge(int u, int v, const T &w): u(u), v(v), w(w) {}
+        auto operator <=> (const edge& o) const {
+            if (auto c = w <=> o.w; c != 0) return c;
+            if (auto c = u <=> o.u; c != 0) return c;
+            return v <=> o.v;
+        }
+    };
+    vector<edge> edges;
+    vector<vector<int>> adj;
+    graph() = default;
+    graph(int n): adj(n) {}
+    int V() const {
+        return adj.size();
+    }
+    int E() const {
+        return edges.size();
+    }
+    void add_directed_edge(int u, int v, const T &w) {
+        adj[u].emplace_back(edges.size());
+        edges.emplace_back(u, v, w);
+    }
+    void add_undirected_edge(int u, int v, const T &w) {
+        adj[u].emplace_back(edges.size());
+        adj[v].emplace_back(edges.size());
+        edges.emplace_back(u, v, w);
+    }
+    auto neighbors(int u) const {
+        return adj[u] | views::transform([this, u] (int i) {
+            return u ^ edges[i].u ^ edges[i].v;
+        });
+    }
+    auto neighbors_index(int u) const {
+        return adj[u] | views::transform([this, u] (int i) {
+            return make_pair(u ^ edges[i].u ^ edges[i].v, i);
+        });
+    }
+    auto neighbors_weight(int u) {
+        return adj[u] | views::transform([this, u] (int i) -> pair<int, T&> {
+            return {u ^ edges[i].u ^ edges[i].v, edges[i].w};
+        });
+    }
+    auto neighbors_weight(int u) const {
+        return adj[u] | views::transform([this, u] (int i) -> pair<int, const T&> {
+            return {u ^ edges[i].u ^ edges[i].v, edges[i].w};
+        });
+    }
+    auto neighbors_weight_index(int u) {
+        return adj[u] | views::transform([this, u] (int i) -> tuple<int, T&, int> {
+            return {u ^ edges[i].u ^ edges[i].v, edges[i].w, i};
+        });
+    }
+    auto neighbors_weight_index(int u) const {
+        return adj[u] | views::transform([this, u] (int i) -> tuple<int, const T&, int> {
+            return {u ^ edges[i].u ^ edges[i].v, edges[i].w, i};
+        });
+    }
+};
+template<>
+struct graph<void> {
+    struct edge {
+        int u, v;
+        edge() = default;
+        edge(int u, int v): u(u), v(v) {}
+        auto operator <=> (const edge& o) const {
+            if (auto c = u <=> o.u; c != 0) return c;
+            return v <=> o.v;
+        }
+    };
+    vector<edge> edges;
+    vector<vector<int>> adj;
+    graph() = default;
+    graph(int n): adj(n) {}
+    int V() const {
+        return adj.size();
+    }
+    int E() const {
+        return edges.size();
+    }
+    void add_directed_edge(int u, int v) {
+        adj[u].emplace_back(edges.size());
+        edges.emplace_back(u, v);
+    }
+    void add_undirected_edge(int u, int v) {
+        adj[u].emplace_back(edges.size());
+        adj[v].emplace_back(edges.size());
+        edges.emplace_back(u, v);
+    }
+    auto neighbors(int u) const {
+        return adj[u] | views::transform([this, u] (int i) {
+            return u ^ edges[i].u ^ edges[i].v;
+        });
+    }
+    auto neighbors_index(int u) const {
+        return adj[u] | views::transform([this, u] (int i) {
+            return make_pair(u ^ edges[i].u ^ edges[i].v, i);
+        });
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>snippet_graph</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

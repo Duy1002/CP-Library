@@ -1,12 +1,14 @@
 <snippet>
 	<content><![CDATA[
-vector<int> tarjan_scc(int n, const vector<vector<int>> &adj) {
-    int time_dfs = 0, p = 0, num = 0;
+// Requires graph
+template<typename T>
+vector<int> tarjan_scc(const graph<T> &g) {
+    int n = g.V(), time_dfs = 0, p = 0, num = 0;
     vector<int> tin(n), low(n), s(n), scc(n, -1);
     auto dfs = [&] (auto &&dfs, int u) -> void {
         tin[u] = low[u] = ++time_dfs;
         s[p++] = u;
-        for (auto &v: adj[u]) {
+        for (auto v: g.neighbors(u)) {
             if (!tin[v]) dfs(dfs, v);
             if (scc[v] == -1) low[u] = min(low[u], low[v]);
         }

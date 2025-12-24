@@ -1,24 +1,21 @@
 <snippet>
 	<content><![CDATA[
-vector<bool> find_bridges(int n, const vector<pair<int, int>> &e) {
-    int m = e.size();
-    vector<vector<pair<int, int>>> adj(n);
-    for (int i = 0; i < m; ++i) {
-        adj[e[i].first].emplace_back(e[i].second, i);
-        adj[e[i].second].emplace_back(e[i].first, i);
-    }
-    int time_dfs = 0;
+// Requires graph
+template<typename T>
+vector<bool> find_bridges(const graph<T> &g) {
+    int n = g.V(), m = g.E(), time_dfs = 0;
     vector<int> num(n), low(n);
-    vector<bool> is_bridge(m);
+    vector<bool> is_bridge(m, true);
     auto dfs = [&] (auto &&dfs, int u, int p) -> void {
         num[u] = low[u] = ++time_dfs;
-        for (auto &[v, i]: adj[u]) {
+        for (auto [v, i]: g.neighbors_index(u)) {
             if (!num[v]) {
                 dfs(dfs, v, u);
                 low[u] = min(low[u], low[v]);
-                is_bridge[i] = (low[v] == num[v]);
+                if (low[v] != num[v]) is_bridge[i] = false;
             } else if (v != p) {
                 low[u] = min(low[u], num[v]);
+                is_bridge[i] = false;
             }
         }
     };

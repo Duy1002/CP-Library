@@ -39,7 +39,6 @@ struct combinatorics {
     }
     modint ballot(int open, int close) {
         if (open < close || close < 0) return 0;
-        resize(open + close);
         return C(open + close, close) - C(open + close, close - 1);
     }
 };
