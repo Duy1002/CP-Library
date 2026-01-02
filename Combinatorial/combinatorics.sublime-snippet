@@ -41,7 +41,8 @@ struct combinatorics {
         if (open < close || close < 0) return 0;
         return C(open + close, close) - C(open + close, close - 1);
     }
-};
+}
+combi;
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>snippet_combinatorics</tabTrigger>

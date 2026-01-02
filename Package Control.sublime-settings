@@ -3,7 +3,9 @@
 	[
 		"LSP",
 		"LSP-clangd",
+		"LSP-pyright",
 		"Package Control",
+		"Terminus",
 	],
 	"in_process_packages":
 	[
