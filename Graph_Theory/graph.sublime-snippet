@@ -15,8 +15,7 @@ struct graph {
     };
     vector<edge> edges;
     vector<vector<int>> adj;
-    graph() = default;
-    graph(int n): adj(n) {}
+    graph(int n = 0): adj(n) {}
     int V() const {
         return adj.size();
     }
@@ -76,8 +75,7 @@ struct graph<void> {
     };
     vector<edge> edges;
     vector<vector<int>> adj;
-    graph() = default;
-    graph(int n): adj(n) {}
+    graph(int n = 0): adj(n) {}
     int V() const {
         return adj.size();
     }

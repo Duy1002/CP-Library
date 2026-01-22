@@ -116,7 +116,18 @@ struct vec { using type = vector<typename vec<T, N - 1>::type>; };
 template<typename T>
 struct vec<T, 1> { using type = vector<T>; };
 template<typename T, size_t N>
-using vector_type = typename vec<T, N>::type;
+using Vector = typename vec<T, N>::type;
+template<typename T, size_t N, size_t... Args>
+struct arr { using type = array<typename arr<T, Args...>::type, N>; };
+template<typename T, size_t N>
+struct arr<T, N> { using type = array<T, N>; };
+template<typename T, size_t... Args>
+using Array = typename arr<T, Args...>::type;
+template<typename Array, typename T>
+void fill_Array(Array &a, const T &v) {
+    if constexpr (requires {a.fill(v);}) a.fill(v);
+    else for (auto &i: a) fill_Array(i, v);
+}
 void khac();
 int main() {
     cin.tie(0)->sync_with_stdio(0);

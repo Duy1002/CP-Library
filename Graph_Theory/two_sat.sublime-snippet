@@ -3,17 +3,17 @@
 // Requires graph, tarjan_scc
 struct two_sat {
     graph<> g;
-    two_sat(int n): g(n) {}
-    void add(int a, bool va, int b, bool vb) {
-        int u = (a << 1) + va, v = (b << 1) + vb;
+    two_sat(int n): g((n + 1) << 1) {}
+    void add(int a, int b) {
+        int u = (abs(a) << 1) ^ (a > 0), v = (abs(b) << 1) ^ (b > 0);
         g.add_directed_edge(u ^ 1, v);
         g.add_directed_edge(v ^ 1, u);
     }
     vector<bool> solve() {
-        int n = g.V();
+        int n = g.V() >> 1;
         vector<int> scc = tarjan_scc(g);
         vector<bool> ans(n);
-        for (int i = 0; i < n; ++i) {
+        for (int i = 1; i < n; ++i) {
             if (scc[i << 1] == scc[i << 1 | 1]) return {};
             ans[i] = (scc[i << 1] > scc[i << 1 | 1]);
         }
