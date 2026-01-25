@@ -2,18 +2,7 @@
 	<content><![CDATA[
 template<typename T = void>
 struct graph {
-    struct edge {
-        int u, v;
-        T w;
-        edge() = default;
-        edge(int u, int v, const T &w): u(u), v(v), w(w) {}
-        auto operator <=> (const edge& o) const {
-            if (auto c = w <=> o.w; c != 0) return c;
-            if (auto c = u <=> o.u; c != 0) return c;
-            return v <=> o.v;
-        }
-    };
-    vector<edge> edges;
+    vector<tuple<int, int, T>> edges;
     vector<vector<int>> adj;
     graph(int n = 0): adj(n) {}
     int V() const {
@@ -33,47 +22,38 @@ struct graph {
     }
     auto neighbors(int u) const {
         return adj[u] | views::transform([this, u] (int i) {
-            return u ^ edges[i].u ^ edges[i].v;
+            return u ^ get<0>(edges[i]) ^ get<1>(edges[i]);
         });
     }
     auto neighbors_index(int u) const {
         return adj[u] | views::transform([this, u] (int i) {
-            return make_pair(u ^ edges[i].u ^ edges[i].v, i);
+            return make_pair(u ^ get<0>(edges[i]) ^ get<1>(edges[i]), i);
         });
     }
     auto neighbors_weight(int u) {
         return adj[u] | views::transform([this, u] (int i) -> pair<int, T&> {
-            return {u ^ edges[i].u ^ edges[i].v, edges[i].w};
+            return {u ^ get<0>(edges[i]) ^ get<1>(edges[i]), get<2>(edges[i])};
         });
     }
     auto neighbors_weight(int u) const {
-        return adj[u] | views::transform([this, u] (int i) -> pair<int, const T&> {
-            return {u ^ edges[i].u ^ edges[i].v, edges[i].w};
+        return adj[u] | views::transform([this, u] (int i) -> pair<int, T&> {
+            return {u ^ get<0>(edges[i]) ^ get<1>(edges[i]), get<2>(edges[i])};
         });
     }
     auto neighbors_weight_index(int u) {
         return adj[u] | views::transform([this, u] (int i) -> tuple<int, T&, int> {
-            return {u ^ edges[i].u ^ edges[i].v, edges[i].w, i};
+            return {u ^ get<0>(edges[i]) ^ get<1>(edges[i]), get<2>(edges[i]), i};
         });
     }
     auto neighbors_weight_index(int u) const {
         return adj[u] | views::transform([this, u] (int i) -> tuple<int, const T&, int> {
-            return {u ^ edges[i].u ^ edges[i].v, edges[i].w, i};
+            return {u ^ get<0>(edges[i]) ^ get<1>(edges[i]), get<2>(edges[i]), i};
         });
     }
 };
 template<>
 struct graph<void> {
-    struct edge {
-        int u, v;
-        edge() = default;
-        edge(int u, int v): u(u), v(v) {}
-        auto operator <=> (const edge& o) const {
-            if (auto c = u <=> o.u; c != 0) return c;
-            return v <=> o.v;
-        }
-    };
-    vector<edge> edges;
+    vector<pair<int, int>> edges;
     vector<vector<int>> adj;
     graph(int n = 0): adj(n) {}
     int V() const {
@@ -93,12 +73,12 @@ struct graph<void> {
     }
     auto neighbors(int u) const {
         return adj[u] | views::transform([this, u] (int i) {
-            return u ^ edges[i].u ^ edges[i].v;
+            return u ^ edges[i].first ^ edges[i].second;
         });
     }
     auto neighbors_index(int u) const {
         return adj[u] | views::transform([this, u] (int i) {
-            return make_pair(u ^ edges[i].u ^ edges[i].v, i);
+            return make_pair(u ^ edges[i].first ^ edges[i].second, i);
         });
     }
 };
