@@ -36,7 +36,7 @@ struct graph {
         });
     }
     auto neighbors_weight(int u) const {
-        return adj[u] | views::transform([this, u] (int i) -> pair<int, T&> {
+        return adj[u] | views::transform([this, u] (int i) -> pair<int, const T&> {
             return {u ^ get<0>(edges[i]) ^ get<1>(edges[i]), get<2>(edges[i])};
         });
     }
