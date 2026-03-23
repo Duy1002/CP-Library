@@ -1,12 +1,12 @@
 <snippet>
     <content><![CDATA[
-template<typename T, typename TT>
+template<typename T>
 struct segment_tree {
     int n;
     vector<T> t;
-    TT op;
+    function<T(T, T)> op;
     T id;
-    segment_tree(TT op, T id): op(op), id(id) {}
+    segment_tree(function<T(T, T)> op, T id): op(op), id(id) {}
     void build(int m) {
         n = 1 << (__lg(m) + 1);
         t.assign(n << 1, id);

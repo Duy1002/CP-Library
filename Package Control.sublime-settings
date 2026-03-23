@@ -1,8 +1,10 @@
 {
 	"installed_packages":
 	[
+		"Lean",
 		"LSP",
 		"LSP-clangd",
+		"LSP-lean",
 		"LSP-pyright",
 		"Package Control",
 		"Terminus",

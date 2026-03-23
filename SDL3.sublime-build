@@ -1,0 +1,8 @@
+{
+    "shell_cmd": "gcc \"$file\" -std=c17 -I C:/msys64/ucrt64/include -L C:/msys64/ucrt64/lib -lSDL3 -o \"$file_base_name\" && \"$file_base_name\"",
+    "working_dir": "$file_path",
+    "selector": "source.c",
+    "env": {
+        "PATH": "C:/msys64/ucrt64/bin"
+    }
+}
